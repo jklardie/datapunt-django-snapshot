@@ -3,7 +3,7 @@ from django.db import models
 
 class BaseSnapshotManager(models.Manager):
     '''
-    SnapshotModels Manager. Used to add query iterator with limit-offset feature.
+    Snapshot models manager. Used to add query iterator with limit-offset feature.
     This feature allows querying the whole table in batches without loading all the rows
     in memory.
     '''
@@ -81,50 +81,3 @@ class BaseSnapshotManager(models.Manager):
 
             offset += limit
             index += limit
-
-
-class DistrictManager(models.Manager):
-    '''
-    This custom manager is created to simplify augmenting datasources
-    with the district code. Simply using the `get_district` method
-    checks if a geo point lies inside a certain district.
-    The district list is retrieved only once from the db and is then cached.
-    '''
-    district_list = None
-
-    def get_district_list(self):
-        '''
-        self.district_list is only generated one time
-        '''
-        if not self.district_list:
-            self.district_list = self.values('wkb_geometry', 'code')
-        return self.district_list
-
-    def get_district(self, point):
-        for district in self.get_district_list():
-            if district['wkb_geometry'].contains(point):
-                return district['code']
-
-
-class NeighbourhoodManager(models.Manager):
-    '''
-    This custom manager is created to simplify augmenting datasources
-    with the neighbourhood code. Simply using the `get_neighbourhood` method
-    checks if a geo point lies inside a certain neighbourhood.
-    The neighbourhood list is retrieved only once from the db and is then cached.
-    '''
-    neighbourhood_list = None
-
-    def get_neighbourhood_list(self):
-        '''
-        self.neighbourhood_list is only generated one time
-        '''
-        if not self.neighbourhood_list:
-            self.neighbourhood_list = self.values('wkb_geometry', 'code')
-        return self.neighbourhood_list
-
-    def get_neighbourhood(self, point):
-        for neighbourhood in self.get_neighbourhood_list():
-            if neighbourhood['wkb_geometry'].contains(point):
-                return neighbourhood['code']
-

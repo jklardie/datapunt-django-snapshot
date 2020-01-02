@@ -145,4 +145,3 @@ class BaseSnapshotImporter:
             )
 
         self.store(model_instance_list)
-

@@ -3,7 +3,7 @@ from django.db import models
 from django.contrib.postgres.fields import JSONField
 
 
-class BaseAPIScraper:
+class BaseAPISnapshotScraper:
     '''
     BaseAPIScraper for scraping an api.
 
@@ -85,4 +85,3 @@ class BaseAPIScraper:
             self.authenticate()
         data = self.fetch()
         self.store(data)
-
